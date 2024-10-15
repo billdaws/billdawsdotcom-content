@@ -1,0 +1,172 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Bill Daws</title>
+		<link>http://localhost:1313/</link>
+		<description>Recent content on Bill Daws</description>
+		<generator>Hugo 0.126.3</generator>
+		<language>en-us</language>
+		<managingEditor>billdaws.marvelous519@passmail.net (Bill Daws)</managingEditor>
+		<webMaster>billdaws.marvelous519@passmail.net (Bill Daws)</webMaster>
+		<copyright>Bill Daws — All rights reserved.</copyright>
+		<lastBuildDate>Thu, 07 Dec 2023 20:38:34 -0500</lastBuildDate>
+		<atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml"/>
+		<item>
+			<title>How I Built This Site</title>
+			<link>http://localhost:1313/posts/how-i-built-this-site/</link>
+			<pubDate>Sun, 19 Nov 2023 20:38:34 -0500</pubDate>
+			<author>billdaws.marvelous519@passmail.net (Bill Daws)</author>
+			<guid isPermaLink="true">http://localhost:1313/posts/how-i-built-this-site/</guid>
+			<description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;This post is one half documentation for my own purposes, and one half tutorial for someone who wants a similar site. This is a pretty simple project, so it&amp;rsquo;s likely that what follows is more than what&amp;rsquo;s necessary, but I&amp;rsquo;m doing it anyway. I intend to update this document at about the same rate as the system it describes (which I don&amp;rsquo;t expect to change much).&lt;/p&gt;
+&lt;h1 id=&#34;guiding-principles&#34;&gt;Guiding Principles&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Focus on learning one thing at a time.&lt;/strong&gt; Focus is very important to productivity, and that includes not spreading myself thin. For example, I&amp;rsquo;ve never run a site on EC2 using &lt;a href=&#34;https://www.phoenixframework.org/&#34;&gt;Phoenix&lt;/a&gt; and Elixir. I&amp;rsquo;ve also never run a personal website before. I chose to learn the latter here. I can always revisit technologies for future projects.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Keep it simple, but not too bad.&lt;/strong&gt; This is not a flagship product, it&amp;rsquo;s a blog. It would be unusual if it gets more than a handful of visitors per week or month (in fact I&amp;rsquo;m guessing most traffic will be from bots). In other words, I don&amp;rsquo;t need to hold it to the same standards that I hold &lt;a href=&#34;http://localhost:1313/about/&#34;&gt;my professional work&lt;/a&gt; to. I don&amp;rsquo;t need stringent alarming, high-availability architectures, etc. That said, it has my name on it, so it shouldn&amp;rsquo;t be total junk.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;requirements&#34;&gt;Requirements&lt;/h1&gt;
+&lt;p&gt;The main reason I wanted this site was because I had never created and hosted a website end-to-end by myself, so it seemed like a good start. I learned to code in college, and didn&amp;rsquo;t start doing web development until I had a job at mature companies with their own platforms for managing and hosting sites. In general, my AWS experience is mostly using it &amp;ldquo;on the job,&amp;rdquo; so it&amp;rsquo;s good to see what customers see.&lt;/p&gt;
+&lt;p&gt;So I started this site with basically one customer in mind: myself.&lt;/p&gt;
+&lt;p&gt;I wanted a site that:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Is easy to understand&lt;/li&gt;
+&lt;li&gt;Is painless to manage, meaning it has a near-zero maintenance cost (either time or money) and it&amp;rsquo;s trivial to update content&lt;/li&gt;
+&lt;li&gt;Gave me an easy venue to mess around and learn stuff about web development (not that I&amp;rsquo;d learn much from a static website, but nonetheless)&lt;/li&gt;
+&lt;li&gt;Cost under $20/month. I expected to make no money off of this site, so affordability is important. This also includes being easy to shut it down, in case bot traffic starts racking up my hosting bills.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I had a pretty good idea of what technology I would use to build this, but these requirements rule out a lot of technology. For example, I knew I wouldn&amp;rsquo;t learn much from using managed services like GitHub Pages. These services would be a good start if I just wanted to post content ASAP, but that isn&amp;rsquo;t the case.&lt;/p&gt;
+&lt;p&gt;The site would host static content (until/unless I decide otherwise); would not require authentication or authorization; not support multiple authors; not support internationalization (if you want to read this content in a language other than English, you probably don&amp;rsquo;t want me to translate it for you); and generally not require much features at all. Simplicity is better than flexibility here, so hosting and running the site on a server would be unnecessary.&lt;/p&gt;
+&lt;h1 id=&#34;architecture&#34;&gt;Architecture&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;../../img/billdawsdotcom-arch.drawio.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;This is the architecture for my website. That&amp;rsquo;s pretty much it.&lt;/p&gt;
+&lt;p&gt;The only things missing here are things that I consider implementation details to support it, like a CloudFront Function I had to write for accessing folders/relative paths (e.g. &lt;a href=&#34;http://localhost:1313/posts/&#34;&gt;/posts/&lt;/a&gt;) to work with S3&amp;rsquo;s ACL configuration.&lt;/p&gt;
+&lt;h2 id=&#34;choices&#34;&gt;Choices&lt;/h2&gt;
+&lt;p&gt;I landed on using AWS over any other hosting provider mainly because I already knew it pretty well and I wanted to focus on learning how to build and run a static site at all, not how to do it using a particular technology. So to minimize how much I was learning at once, I chose the platform I&amp;rsquo;m most familiar with.&lt;/p&gt;
+&lt;p&gt;That choice makes the other ones pretty obvious. I needed a place to store static assets like HTML files and images, for which &lt;a href=&#34;https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html&#34;&gt;S3&lt;/a&gt; is the most obvious choice. &lt;a href=&#34;https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html&#34;&gt;S3 is capable of hosting a static website on its own&lt;/a&gt;, and that covers most of my requirements really.&lt;/p&gt;
+&lt;p&gt;One thing S3&amp;rsquo;s hosting doesn&amp;rsquo;t support is TLS (i.e. hosting via HTTPS rather HTTP). Technically, nothing I have planned for this site really &lt;em&gt;requires&lt;/em&gt; TLS, like handling financial transactions. But I plan to send this site to non-technical folks, and I don&amp;rsquo;t want them to turn away when their browser gives them the scary &amp;ldquo;This site is not secure&amp;rdquo; warning. The next logical choice is to introduce &lt;a href=&#34;https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html&#34;&gt;CloudFront&lt;/a&gt; as a place to attach my custom domain and then certify it. Certification is done via &lt;a href=&#34;https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html&#34;&gt;AWS Certificate Manager.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;One thing missing here is my domain registrar. I use &lt;a href=&#34;https://porkbun.com/&#34;&gt;Porkbun&lt;/a&gt; for this. I have nothing against &lt;a href=&#34;https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html&#34;&gt;Route53,&lt;/a&gt; in fact I think it&amp;rsquo;s great. I chose not to use Route53 for two reasons: I bought the domain before I had any plan about how to build the site; and if I ever wanted to migrate off of AWS, I would want to do that without messing with domain registration. Being able to do that reduces the likelihood that my site becomes a dead link while I wait to do some work, since I&amp;rsquo;ll often go weeks without updating this site.&lt;/p&gt;
+&lt;p&gt;Lastly, I hate managing infrastructure manually, so I did everything using the &lt;a href=&#34;https://docs.aws.amazon.com/cdk/v2/guide/home.html&#34;&gt;Cloud Development Kit (CDK)&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This site is a &lt;a href=&#34;https://gohugo.io/getting-started/usage/&#34;&gt;Hugo site&lt;/a&gt;. The source code is managed privately.&lt;/p&gt;
+&lt;h3 id=&#34;alternatives-considered&#34;&gt;Alternatives Considered&lt;/h3&gt;
+&lt;p&gt;Admittedly this architecture is simple enough that there&amp;rsquo;s not much difference between its dependencies and their competitors, especially not within AWS.&lt;/p&gt;
+&lt;p&gt;I didn&amp;rsquo;t spend much time considering other cloud providers like Google Cloud or Azure. From the perspective of my functional requirements, I&amp;rsquo;m sure they&amp;rsquo;re just as viable. The main benefit of using a different cloud provider would be to learn something, but my focus is on learning how to make a website at all.&lt;/p&gt;
+&lt;p&gt;There&amp;rsquo;s many ways within AWS to host a website. I could have used EC2 and simply ran the site myself. I could have used Lightsail or Amplify. These services are more complex, but also more flexible, than what I need. If my requirements included anything more than serving text, I would have went with one of them (or really, I would have had to, since S3 can only serve static content). Even if I used a compute service, I would probably rely on S3 and CloudFront for storage and distribution.&lt;/p&gt;
+&lt;p&gt;An alternative to CDK is to use &lt;a href=&#34;https://opentofu.org/&#34;&gt;OpenTofu&lt;/a&gt; (or Terraform), but again, I&amp;rsquo;m avoiding learning too many things at once. An advantage to using OpenTofu is that I&amp;rsquo;d probably have an easier time switching clouds if I ever wanted to, but I&amp;rsquo;ll cross that bridge when I get to it.&lt;/p&gt;
+&lt;p&gt;I thought about using a different static site generator than Hugo, but decided against it because the differences between generators seem mostly negligible, and the cost of switching seems low. Hugo is pretty fast, which is nice, too.&lt;/p&gt;
+&lt;h1 id=&#34;learnings&#34;&gt;Learnings&lt;/h1&gt;
+&lt;p&gt;It&amp;rsquo;s really easy to set up a static website. I think it took me about a weekend at maximum. It would have taken me less time if I had lower standards, like not requiring infrastructure as code, or not requiring TLS, etc. My next static website will probably use a more hands-off approach, because I don&amp;rsquo;t see much benefit in building one from scratch now that I&amp;rsquo;ve done it. That said, I have no regrets about building this site this way.&lt;/p&gt;
+&lt;p&gt;In the process I was exposed to what it&amp;rsquo;s like to use CDK from the perspective of someone who isn&amp;rsquo;t working at AWS. The internal experience of using CDK is really nice, because CDK integrates with internal account management tools natively. The external experience of creating an AWS account, setting up roles for access using &lt;a href=&#34;https://aws.amazon.com/iam/identity-center/&#34;&gt;IAM Identity Center&lt;/a&gt;, and then using those roles is not as nice as the internal, but it&amp;rsquo;s not bad either. My future projects will involve some more sophisticated infrastructure, and I&amp;rsquo;m glad I learned the &amp;ldquo;overhead&amp;rdquo; stuff on a simple project like this one.&lt;/p&gt;
+</description>
+		</item>
+		<item>
+			<title>Learning Nix</title>
+			<link>http://localhost:1313/posts/learning-nix/</link>
+			<pubDate>Thu, 07 Dec 2023 20:38:34 -0500</pubDate>
+			<author>billdaws.marvelous519@passmail.net (Bill Daws)</author>
+			<guid isPermaLink="true">http://localhost:1313/posts/learning-nix/</guid>
+			<description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;I recently bought a new computer for personal use. Like any new computer, I had to set up my favorite software on it: Spotify, Firefox, the One True Editor, and so on.&lt;/p&gt;
+&lt;p&gt;A reasonable person would go about this problem the way they&amp;rsquo;d go about most problems: by solving it. For better or for worse, I am not such a person. I decided to automate this setup so that in theory I&amp;rsquo;d never have to do it again.&lt;/p&gt;
+&lt;p&gt;As the saying goes, now I&amp;rsquo;ve got &lt;strong&gt;two problems.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This post is a mostly unstructured catalog of my thoughts about Nix. If you a want a more detailed, thorough look at Nix, &lt;a href=&#34;https://ianthehenry.com/posts/how-to-learn-nix/&#34;&gt;Ian Henry&amp;rsquo;s tour of the Nix manual&lt;/a&gt; is where it&amp;rsquo;s at.&lt;/p&gt;
+&lt;h2 id=&#34;before-nix&#34;&gt;Before Nix&lt;/h2&gt;
+&lt;p&gt;In a past life, I worked on a system for provisioning MapReduce clusters.
+People doing data stuff would click buttons in a UI, go get a cup of coffee, and come back with a ready-to-use cluster for data stuff.&lt;/p&gt;
+&lt;p&gt;These clusters were often too large (in general, they were just too large &amp;ndash; but that&amp;rsquo;s an aside) to manage by hand, so my team used &lt;a href=&#34;https://www.ansible.com/&#34;&gt;Ansible.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_intro.html&#34;&gt;Ansible playbooks&lt;/a&gt; allow you to write a YAML file that does normal sysadmin stuff like
+installing software, configuring software, pipe &lt;code&gt;curl&lt;/code&gt; into &lt;code&gt;sh&lt;/code&gt;, and so on. Ansible is a fine tool, but I didn&amp;rsquo;t enjoy using it much personally.&lt;/p&gt;
+&lt;p&gt;I thought to myself, &amp;ldquo;Surely I can use something simpler than Ansible, like my own Bash script.&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Then I got into about 100 lines of Bash, decided some logic was better handled in a Python script, wrote about 100 lines of Python, and thought again &amp;ndash; surely there&amp;rsquo;s something simpler that&amp;rsquo;s a better fit here.&lt;/p&gt;
+&lt;p&gt;So obviously I landed on Nix.&lt;/p&gt;
+&lt;h2 id=&#34;getting-started&#34;&gt;Getting Started&lt;/h2&gt;
+&lt;p&gt;I don&amp;rsquo;t remember when or where I first heard about Nix, but I remember hearing that it was confusing and poorly documented. But that was a long time ago. I&amp;rsquo;m a smarter person now, and Nix has probably gotten better since then.&lt;/p&gt;
+&lt;p&gt;I started using Nix by treating it like a black box, which is a strategy that&amp;rsquo;s treated me well for being productive quickly.&lt;/p&gt;
+&lt;p&gt;I found an &lt;a href=&#34;https://github.com/dustinlyons/nixos-config/&#34;&gt;example Nix configuration&lt;/a&gt; (thanks Dustin!) that checked some boxes I knew I&amp;rsquo;d care about:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;macOS compatibility. This is important, because my new computer is a MacBook.&lt;/li&gt;
+&lt;li&gt;NixOS compatibility. This is a nice-to-have. At the time I wasn&amp;rsquo;t sure if I&amp;rsquo;d like using Nix, but if I did, I would want to use NixOS for dev/homelab hosts.&lt;/li&gt;
+&lt;li&gt;Nix Flakes and Home Manager. I knew enough about Nix to know that these are &amp;ldquo;experimental&amp;rdquo; features that are highly encouraged for new Nix users, so I might as well start with them and avoid having to &amp;ldquo;unlearn&amp;rdquo; the less popular methods. I can always go back and learn the &amp;ldquo;old&amp;rdquo; ways of doing things later.&lt;/li&gt;
+&lt;li&gt;Secrets. I don&amp;rsquo;t plan to open source my Nix configuration, but if I do, it&amp;rsquo;s good to know I can manage secrets separately.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;But most importantly, a really obvious iteration loop: change some files, run &lt;code&gt;bin/build&lt;/code&gt;, and see if it worked.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;nix&lt;/code&gt; command has a lot going on:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ nix --help &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; wc -l
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;m&#34;&gt;897&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# As of...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ nix --version
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;nix &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;Nix&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; 2.18.1
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And I bet that makes a lot of sense for someone out there, but as a brand new user, not for me. A suite of helper scripts would probably be the first thing I write, so it makes sense to bootstrap it by lifting someone else&amp;rsquo;s repo.&lt;/p&gt;
+&lt;p&gt;This reduces a daunting space of problems, learning Nix, to a normal process for working on code, which I do every day. Great!&lt;/p&gt;
+&lt;h2 id=&#34;arguably-interesting-problems&#34;&gt;Arguably Interesting Problems&lt;/h2&gt;
+&lt;p&gt;I won&amp;rsquo;t describe every problem I ran into, because most of them are better described elsewhere or just typical newbie problems.&lt;/p&gt;
+&lt;h3 id=&#34;a-minor-inconvenience-with-doom-emacs&#34;&gt;A Minor Inconvenience with Doom (Emacs)&lt;/h3&gt;
+&lt;p&gt;tl;dr I fixed a minor inconvenience (extra icons in my Dock) in using Doom Emacs on macOS by also using Chemacs, another Emacs package. Since they&amp;rsquo;re all managed by plain-text config files, and Nix is very amicable to such config management, I was able to get everything working &amp;ldquo;just right.&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;One sort of interesting problem I ran into was with getting &lt;a href=&#34;https://github.com/doomemacs/doomemacs&#34;&gt;Doom Emacs&lt;/a&gt; to work in a Nix-y way.&lt;/p&gt;
+&lt;p&gt;Emacs in general is pretty Nix-friendly. Most Emacs config is manage declaratively (or at least as plain-text source files) these days, and there&amp;rsquo;s an &lt;code&gt;emacsPackages&lt;/code&gt; package set that works out-of-the-box with Nix if you&amp;rsquo;d rather use that.&lt;/p&gt;
+&lt;p&gt;But Doom Emacs is a little different, in that its installation process is meant for any Emacs user and is generally Nix-agnostic. There&amp;rsquo;s a &lt;a href=&#34;https://github.com/nix-community/nix-doom-emacs&#34;&gt;community-managed derivation for it&lt;/a&gt;, but it&amp;rsquo;s effectively unmaintained, so I didn&amp;rsquo;t bother with it.&lt;/p&gt;
+&lt;p&gt;Luckily, the creator of Doom Emacs is &lt;a href=&#34;https://github.com/hlissner/dotfiles&#34;&gt;also a Nix user!&lt;/a&gt; Using his configuration I was able to get a working Doom Emacs installation, with one small problem.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m using macOS, which provides a nice-looking Dock to display my favorite and currently-running applications. When I&amp;rsquo;m running &lt;code&gt;Emacs.app&lt;/code&gt; (installed via Nix), everything looks fine. I&amp;rsquo;ve got one icon for Emacs, and nothing else, because I&amp;rsquo;m not running anything else. But this gives me Emacs, not Doom Emacs, because the config lives in different places: &lt;code&gt;~/.emacs.d&lt;/code&gt; vs. &lt;code&gt;~/.doom.d&lt;/code&gt; and &lt;code&gt;~/.config/emacs&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;But when I run &lt;code&gt;doom run&lt;/code&gt;, I get Doom Emacs, but it uses a separate icon in the Dock than regular &lt;code&gt;Emacs.app&lt;/code&gt;. That&amp;rsquo;s not terrible, but:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;I can&amp;rsquo;t easily call &lt;code&gt;doom run&lt;/code&gt; from the dock&lt;/li&gt;
+&lt;li&gt;The extra icon is ugly, and surely I didn&amp;rsquo;t pay the Apple Tax to live with minor eyesores like that&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;So I tried setting up an &lt;a href=&#34;https://en.wikipedia.org/wiki/Automator_(macOS)&#34;&gt;Automator script&lt;/a&gt; as an application to run &lt;code&gt;doom run&lt;/code&gt; so I could run it from the dock, but this still gave me extra icons. In fact, it gave me an extra one, which pointed to the Automator script. That icon pointing to the Automator was also a default &amp;ldquo;text file&amp;rdquo; icon, which was even uglier.&lt;/p&gt;
+&lt;p&gt;I needed some way to trick my &lt;code&gt;Emacs.app&lt;/code&gt; into running Doom&amp;rsquo;s config as-is &amp;ndash; not as a separate executable.&lt;/p&gt;
+&lt;p&gt;Enter &lt;a href=&#34;https://github.com/plexus/chemacs2&#34;&gt;Chemacs&lt;/a&gt;. Chemacs is an &amp;ldquo;Emacs profile switcher,&amp;rdquo; or a &amp;ldquo;bootloader for Emacs,&amp;rdquo;&amp;quot; which lets you easily switch between different Emacs configs by basically adding one more dotfile to the mix.&lt;/p&gt;
+&lt;p&gt;So now my Nix config looks pretty simple:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-nix&#34; data-lang=&#34;nix&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# Wherever you&amp;#39;d define your dotfiles, or however else you define your emacs config:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pkgs&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;config&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;...&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;s2&#34;&gt;&amp;#34;.emacs-profiles.el&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;text&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s1&#34;&gt;      ((&amp;#34;default&amp;#34; . ((user-emacs-directory . &amp;#34;&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;XDG_CONFIG_HOME&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;/emacs&amp;#34;)))
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s1&#34;&gt;       ;; Any other profiles you care about go here.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s1&#34;&gt;       )
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s1&#34;&gt;    &amp;#39;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;That&amp;rsquo;s it. Get Doom and Chemacs playing nicely and you remove the minor inconvenience of extra icons in your Dock.&lt;/p&gt;
+&lt;h2 id=&#34;do-i-recommend-nix&#34;&gt;Do I Recommend Nix?&lt;/h2&gt;
+&lt;p&gt;So far:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Nix the package manager, yes.&lt;/li&gt;
+&lt;li&gt;Nix the operating system, it&amp;rsquo;s too early in my usage to tell, sorry.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Unless:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;You don&amp;rsquo;t like side quests. If you&amp;rsquo;re more about the destination than the journey, you might as well skip Nix, because you&amp;rsquo;ll sink a lot of time into the &amp;ldquo;extra stuff&amp;rdquo; rather than what you set out to do originally. I was already an Emacs user so this didn&amp;rsquo;t bother me.&lt;/li&gt;
+&lt;li&gt;You don&amp;rsquo;t like figuring things out.&lt;/li&gt;
+&lt;li&gt;You manage fewer than 3 hosts.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I absolutely &lt;em&gt;hate&lt;/em&gt; the inconsistency between hosts that I was managing: my work laptop, my development VM at work, my personal laptop, and a homelab server. I dislike it enough that I figured it&amp;rsquo;s worth a weekend to grapple with Nix. I think that&amp;rsquo;s paid off pretty well already, and will continue to do so as long as I maintain my discipline about it.&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://ianthehenry.com/posts/how-to-learn-nix/&#34;&gt;https://ianthehenry.com/posts/how-to-learn-nix/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.joseferben.com/posts/installing_only_certain_packages_from_an_unstable_nixos_channel/&#34;&gt;https://www.joseferben.com/posts/installing_only_certain_packages_from_an_unstable_nixos_channel/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://xeiaso.net/talks/asg-2023-nixos/&#34;&gt;https://xeiaso.net/talks/asg-2023-nixos/&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I stand on the shoulders of giants:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;The repo I started mine with: &lt;a href=&#34;https://github.com/dustinlyons/nixos-config/&#34;&gt;https://github.com/dustinlyons/nixos-config/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;dotfiles from hlissner, the creator of Doom Emacs &lt;a href=&#34;https://github.com/hlissner/dotfiles&#34;&gt;https://github.com/hlissner/dotfiles&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+		</item>
+		<item>
+			<title>Hello!</title>
+			<link>http://localhost:1313/about/</link>
+			<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+			<author>billdaws.marvelous519@passmail.net (Bill Daws)</author>
+			<guid isPermaLink="true">http://localhost:1313/about/</guid>
+			<description>&lt;p&gt;Welcome to my website.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m a software developer living in the Northeastern United States.&lt;/p&gt;
+&lt;p&gt;I live with my fiancée, Megan, and our two cats, Bernard and Stella.&lt;/p&gt;
+&lt;p&gt;Sometimes I&amp;rsquo;ll post on this site, what I&amp;rsquo;m thinking about, or what I&amp;rsquo;m working on.&lt;/p&gt;
+&lt;p&gt;It will never be the viewpoints of my employer, unless explicitly stated otherwise.&lt;/p&gt;
+&lt;p&gt;You can email me at &lt;a href=&#34;mailto:billdaws.marvelous519@passmail.net&#34;&gt;billdaws.marvelous519@passmail.net&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;(This is an alias email &amp;ndash; posting my real one could expose me to an unstoppable deluge of spam.)&lt;/p&gt;
+</description>
+		</item>
+	</channel>
+</rss>

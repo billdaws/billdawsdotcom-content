@@ -1,0 +1,139 @@
+baseURL = 'https://billdaws.com'
+languageCode = 'en-us'
+title = 'Bill Daws'
+
+theme = 'github.com/spookey/slick'
+
+# Will appear below the footer links with a © sign and the current year
+copyright = "Bill Daws — All rights reserved."
+
+[markup]
+    [markup.goldmark]
+        [markup.goldmark.renderer]
+            unsafe = true               # Allow html (needed for some shortcodes)
+    [markup.highlight]
+        codeFences = true               # Enable highlighting inside codefences
+        guessSyntax = true              # Highlight code without language tag
+        noClasses = false               # Use the theme's style sheet
+
+canonifyURLs = true
+
+# Configure pagination
+paginate = 10
+paginatePath = "page"
+
+[params]
+    # Site subtitle (not shown if commented out or set to false)
+    # subtitle = ""
+
+    # Site description
+    description = "Bill Daws's personal website."
+
+    # Favicon file (relative to baseURL - place in assets folder)
+    favicon = "favicon.png"
+    # Deprecated feature - this is just here to check the deprecation notice!
+    css = "custom.css"
+
+    # Define formatting of dates
+    # (optional, falls back to RFC822 format if not set)
+    # For reference to date and time formatting, see:
+    # https://gohugo.io/functions/format/#hugo-date-and-time-templating-reference
+    # Make sure to set showMetaDates to true to see any dates
+    dateFmt = "Mon, 02 Jan 2006 15:04:05 MST"
+
+    # Customize the text of the 404 page here
+    errorPageText = "There's nothing to see here, please move along!"
+
+    # Define ordering by parameter - anything from the frontmatter is possible
+    # Popular options would be "date" (default), "weight", "title", "publishdate"
+    orderPageParam = "date"
+    # Reverse the ordering from above
+    orderPageReverse = false
+
+    # Header with title/subtitle can be disabled here.
+    # (If you disable this, add some link on the index page inside menu.main,
+    #  otherwise your visitors will get confused and lost...)
+    showNavHeader = true
+
+    # If false the RSS link in footer is not shown
+    showRssLink = true
+
+    # Decide if only summaries are shown on the main page or the full content
+    showFullContent = false
+
+    # If false no pagination is shown when there is nothing to paginate
+    showEmptyPagination = true
+
+    # If false the title, dates and taxonomy are not shown on single view
+    showMeta = true
+
+    # If false the dates for the posts are not shown
+    showMetaDates = true
+
+    # If false the taxonomy links for the posts are not shown
+    showMetaLinks = true
+
+    # Uses Hugo internal templates if set
+    opengraph = false
+    schema = false
+    twitter_cards = false
+
+
+[author]
+    name = "Bill Daws"
+    email = "billdaws.marvelous519@passmail.net"
+
+
+[services.rss]
+    # limit the length of the rss feed (default: unlimited)
+    limit = 0
+
+
+[menu]
+    # Configure main menu entries (header)
+    # Currently set to list all taxonomies and posts
+    [[menu.main]]
+        identifier = "post"
+        name = "Posts"
+        title = "All posts"
+        pageref = "/posts"
+        weight = 2
+
+    [[menu.main]]
+        identifier = "about"
+        name = "About"
+        title = "About"
+        pageref = "/about"
+        weight = 1
+
+    # Add some footer links to your likings
+    [[menu.footer]]
+        name = "GitHub"
+        title = "My GitHub profile."
+        url = "https://github.com/billdaws"
+        weight = 1
+
+    [[menu.footer]]
+        name = "LinkedIn"
+        title = "My LinkedIn profile."
+        url = "https://www.linkedin.com/in/bill-daws/"
+        weight = 1
+
+    [[menu.footer]]
+        name = "Theme"
+        title = "Theme page on gohugo.io"
+        url = "https://themes.gohugo.io/slick"
+        weight = 2
+
+# Enable generation of robots.txt
+enableRobotsTXT = true
+
+# Configure sitemap
+[sitemap]
+  # Values are 'always', 'hourly', 'daily',' weekly', 'monthly', 'yearly',
+  # and 'never'. Set to empty string to omit inclusion
+  changefreq = "monthly"
+  # Adjust filename of sitemap. (default: sitemap.xml)
+  filename = "sitemap.xml"
+  # Values range from 0.0 to 1.0. Set to -1 to omit inclusion
+  priority =  -1

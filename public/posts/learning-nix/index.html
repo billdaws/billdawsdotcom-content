@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8"/>
+  <title>Learning Nix | Bill Daws</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="description" content="Introduction I recently bought a new computer for personal use. Like any new computer, I had to set up my favorite software on it: Spotify, Firefox, the One True Editor, and so on.
+A reasonable person would go about this problem the way they&rsquo;d go about most problems: by solving it. For better or for worse, I am not such a person. I decided to automate this setup so that in theory I&rsquo;d never have to do it again."/>
+  <meta name="author" content="Bill Daws"/><meta name="generator" content="Hugo 0.126.3">
+  <link rel="alternate" type="application/rss+xml" href="/index.xml" title="Bill Daws Feed"/>
+  <link rel="stylesheet" href="/style.14c8ff19b50072be4166d83dec461766751e135f9561937968934a9c0c41c417.css" integrity="sha256-FMj/GbUAcr5BZtg97EYXZnUeE1+VYZN5aJNKnAxBxBc=" crossorigin="anonymous"/>
+  <script defer src="/script.c515b297a254a81ade1515172752b9cd6e495af3db38009536fba14b53f6c7e9.js" integrity="sha256-xRWyl6JUqBreFRUXJ1K5zW5JWvPbOACVNvuhS1P2x+k=" crossorigin="anonymous"></script>
+  
+
+</head>
+<body>
+<div class="pure-g">
+  <div class="pure-u-1-24 pure-u-md-5-24"></div>
+  <div class="pure-u-22-24 pure-u-md-14-24">
+  
+<div class="navigation">
+  <div class="navigation-header">
+    <div class="pure-menu pure-menu-horizontal">
+      <a class="pure-menu-heading pure-menu-link" href="/">
+        Bill Daws
+      </a>
+    </div>
+  </div>
+  <div class="navigation-content">
+    <div class="pure-menu pure-menu-horizontal">
+      <ul class="pure-menu-list">
+        <li class="pure-menu-item" title="About">
+          <a  class="pure-menu-link" href="/about/">About</a>
+        </li>
+        <li class="pure-menu-item pure-menu-selected" title="All posts">
+          <a  class="pure-menu-link" href="/posts/">Posts</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+  
+<div>
+  <div>
+    <h2 class="post-title">
+      
+      Learning Nix
+    </h2>
+    
+<div class="post-meta">
+  <span>Date</span> &#x5b;
+    <time datetime="2023-12-07T20:38:34-05:00">
+      Thu, 07 Dec 2023 20:38:34 EST
+    </time>
+  &#x5d;
+</div>
+
+  </div>
+  <div>
+    <h1 id="introduction">Introduction</h1>
+<p>I recently bought a new computer for personal use. Like any new computer, I had to set up my favorite software on it: Spotify, Firefox, the One True Editor, and so on.</p>
+<p>A reasonable person would go about this problem the way they&rsquo;d go about most problems: by solving it. For better or for worse, I am not such a person. I decided to automate this setup so that in theory I&rsquo;d never have to do it again.</p>
+<p>As the saying goes, now I&rsquo;ve got <strong>two problems.</strong></p>
+<p>This post is a mostly unstructured catalog of my thoughts about Nix. If you a want a more detailed, thorough look at Nix, <a href="https://ianthehenry.com/posts/how-to-learn-nix/">Ian Henry&rsquo;s tour of the Nix manual</a> is where it&rsquo;s at.</p>
+<h2 id="before-nix">Before Nix</h2>
+<p>In a past life, I worked on a system for provisioning MapReduce clusters.
+People doing data stuff would click buttons in a UI, go get a cup of coffee, and come back with a ready-to-use cluster for data stuff.</p>
+<p>These clusters were often too large (in general, they were just too large &ndash; but that&rsquo;s an aside) to manage by hand, so my team used <a href="https://www.ansible.com/">Ansible.</a></p>
+<p><a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_intro.html">Ansible playbooks</a> allow you to write a YAML file that does normal sysadmin stuff like
+installing software, configuring software, pipe <code>curl</code> into <code>sh</code>, and so on. Ansible is a fine tool, but I didn&rsquo;t enjoy using it much personally.</p>
+<p>I thought to myself, &ldquo;Surely I can use something simpler than Ansible, like my own Bash script.&rdquo;</p>
+<p>Then I got into about 100 lines of Bash, decided some logic was better handled in a Python script, wrote about 100 lines of Python, and thought again &ndash; surely there&rsquo;s something simpler that&rsquo;s a better fit here.</p>
+<p>So obviously I landed on Nix.</p>
+<h2 id="getting-started">Getting Started</h2>
+<p>I don&rsquo;t remember when or where I first heard about Nix, but I remember hearing that it was confusing and poorly documented. But that was a long time ago. I&rsquo;m a smarter person now, and Nix has probably gotten better since then.</p>
+<p>I started using Nix by treating it like a black box, which is a strategy that&rsquo;s treated me well for being productive quickly.</p>
+<p>I found an <a href="https://github.com/dustinlyons/nixos-config/">example Nix configuration</a> (thanks Dustin!) that checked some boxes I knew I&rsquo;d care about:</p>
+<ol>
+<li>macOS compatibility. This is important, because my new computer is a MacBook.</li>
+<li>NixOS compatibility. This is a nice-to-have. At the time I wasn&rsquo;t sure if I&rsquo;d like using Nix, but if I did, I would want to use NixOS for dev/homelab hosts.</li>
+<li>Nix Flakes and Home Manager. I knew enough about Nix to know that these are &ldquo;experimental&rdquo; features that are highly encouraged for new Nix users, so I might as well start with them and avoid having to &ldquo;unlearn&rdquo; the less popular methods. I can always go back and learn the &ldquo;old&rdquo; ways of doing things later.</li>
+<li>Secrets. I don&rsquo;t plan to open source my Nix configuration, but if I do, it&rsquo;s good to know I can manage secrets separately.</li>
+</ol>
+<p>But most importantly, a really obvious iteration loop: change some files, run <code>bin/build</code>, and see if it worked.</p>
+<p>The <code>nix</code> command has a lot going on:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ nix --help <span class="p">|</span> wc -l
+</span></span><span class="line"><span class="cl"><span class="m">897</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># As of...</span>
+</span></span><span class="line"><span class="cl">$ nix --version
+</span></span><span class="line"><span class="cl">nix <span class="o">(</span>Nix<span class="o">)</span> 2.18.1
+</span></span></code></pre></div><p>And I bet that makes a lot of sense for someone out there, but as a brand new user, not for me. A suite of helper scripts would probably be the first thing I write, so it makes sense to bootstrap it by lifting someone else&rsquo;s repo.</p>
+<p>This reduces a daunting space of problems, learning Nix, to a normal process for working on code, which I do every day. Great!</p>
+<h2 id="arguably-interesting-problems">Arguably Interesting Problems</h2>
+<p>I won&rsquo;t describe every problem I ran into, because most of them are better described elsewhere or just typical newbie problems.</p>
+<h3 id="a-minor-inconvenience-with-doom-emacs">A Minor Inconvenience with Doom (Emacs)</h3>
+<p>tl;dr I fixed a minor inconvenience (extra icons in my Dock) in using Doom Emacs on macOS by also using Chemacs, another Emacs package. Since they&rsquo;re all managed by plain-text config files, and Nix is very amicable to such config management, I was able to get everything working &ldquo;just right.&rdquo;</p>
+<p>One sort of interesting problem I ran into was with getting <a href="https://github.com/doomemacs/doomemacs">Doom Emacs</a> to work in a Nix-y way.</p>
+<p>Emacs in general is pretty Nix-friendly. Most Emacs config is manage declaratively (or at least as plain-text source files) these days, and there&rsquo;s an <code>emacsPackages</code> package set that works out-of-the-box with Nix if you&rsquo;d rather use that.</p>
+<p>But Doom Emacs is a little different, in that its installation process is meant for any Emacs user and is generally Nix-agnostic. There&rsquo;s a <a href="https://github.com/nix-community/nix-doom-emacs">community-managed derivation for it</a>, but it&rsquo;s effectively unmaintained, so I didn&rsquo;t bother with it.</p>
+<p>Luckily, the creator of Doom Emacs is <a href="https://github.com/hlissner/dotfiles">also a Nix user!</a> Using his configuration I was able to get a working Doom Emacs installation, with one small problem.</p>
+<p>I&rsquo;m using macOS, which provides a nice-looking Dock to display my favorite and currently-running applications. When I&rsquo;m running <code>Emacs.app</code> (installed via Nix), everything looks fine. I&rsquo;ve got one icon for Emacs, and nothing else, because I&rsquo;m not running anything else. But this gives me Emacs, not Doom Emacs, because the config lives in different places: <code>~/.emacs.d</code> vs. <code>~/.doom.d</code> and <code>~/.config/emacs</code>.</p>
+<p>But when I run <code>doom run</code>, I get Doom Emacs, but it uses a separate icon in the Dock than regular <code>Emacs.app</code>. That&rsquo;s not terrible, but:</p>
+<ol>
+<li>I can&rsquo;t easily call <code>doom run</code> from the dock</li>
+<li>The extra icon is ugly, and surely I didn&rsquo;t pay the Apple Tax to live with minor eyesores like that</li>
+</ol>
+<p>So I tried setting up an <a href="https://en.wikipedia.org/wiki/Automator_(macOS)">Automator script</a> as an application to run <code>doom run</code> so I could run it from the dock, but this still gave me extra icons. In fact, it gave me an extra one, which pointed to the Automator script. That icon pointing to the Automator was also a default &ldquo;text file&rdquo; icon, which was even uglier.</p>
+<p>I needed some way to trick my <code>Emacs.app</code> into running Doom&rsquo;s config as-is &ndash; not as a separate executable.</p>
+<p>Enter <a href="https://github.com/plexus/chemacs2">Chemacs</a>. Chemacs is an &ldquo;Emacs profile switcher,&rdquo; or a &ldquo;bootloader for Emacs,&rdquo;&quot; which lets you easily switch between different Emacs configs by basically adding one more dotfile to the mix.</p>
+<p>So now my Nix config looks pretty simple:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># Wherever you&#39;d define your dotfiles, or however else you define your emacs config:</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">pkgs</span><span class="o">,</span> <span class="n">config</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;.emacs-profiles.el&#34;</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">      ((&#34;default&#34; . ((user-emacs-directory . &#34;</span><span class="si">${</span><span class="n">XDG_CONFIG_HOME</span><span class="si">}</span><span class="s1">/emacs&#34;)))
+</span></span></span><span class="line"><span class="cl"><span class="s1">       ;; Any other profiles you care about go here.
+</span></span></span><span class="line"><span class="cl"><span class="s1">       )
+</span></span></span><span class="line"><span class="cl"><span class="s1">    &#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>That&rsquo;s it. Get Doom and Chemacs playing nicely and you remove the minor inconvenience of extra icons in your Dock.</p>
+<h2 id="do-i-recommend-nix">Do I Recommend Nix?</h2>
+<p>So far:</p>
+<ol>
+<li>Nix the package manager, yes.</li>
+<li>Nix the operating system, it&rsquo;s too early in my usage to tell, sorry.</li>
+</ol>
+<p>Unless:</p>
+<ol>
+<li>You don&rsquo;t like side quests. If you&rsquo;re more about the destination than the journey, you might as well skip Nix, because you&rsquo;ll sink a lot of time into the &ldquo;extra stuff&rdquo; rather than what you set out to do originally. I was already an Emacs user so this didn&rsquo;t bother me.</li>
+<li>You don&rsquo;t like figuring things out.</li>
+<li>You manage fewer than 3 hosts.</li>
+</ol>
+<p>I absolutely <em>hate</em> the inconsistency between hosts that I was managing: my work laptop, my development VM at work, my personal laptop, and a homelab server. I dislike it enough that I figured it&rsquo;s worth a weekend to grapple with Nix. I think that&rsquo;s paid off pretty well already, and will continue to do so as long as I maintain my discipline about it.</p>
+<h2 id="references">References</h2>
+<ol>
+<li><a href="https://ianthehenry.com/posts/how-to-learn-nix/">https://ianthehenry.com/posts/how-to-learn-nix/</a></li>
+<li><a href="https://www.joseferben.com/posts/installing_only_certain_packages_from_an_unstable_nixos_channel/">https://www.joseferben.com/posts/installing_only_certain_packages_from_an_unstable_nixos_channel/</a></li>
+<li><a href="https://xeiaso.net/talks/asg-2023-nixos/">https://xeiaso.net/talks/asg-2023-nixos/</a></li>
+</ol>
+<p>I stand on the shoulders of giants:</p>
+<ol>
+<li>The repo I started mine with: <a href="https://github.com/dustinlyons/nixos-config/">https://github.com/dustinlyons/nixos-config/</a></li>
+<li>dotfiles from hlissner, the creator of Doom Emacs <a href="https://github.com/hlissner/dotfiles">https://github.com/hlissner/dotfiles</a></li>
+</ol>
+
+  </div>
+</div>
+  <div class="footer">
+  <div class="footer-content">
+    <div class="pure-menu pure-menu-horizontal">
+      <ul class="pure-menu-list">
+        <li class="pure-menu-item" title="My GitHub profile.">
+          <a class="pure-menu-link" href="https://github.com/billdaws">GitHub</a>
+        </li>
+        <li class="pure-menu-item" title="My LinkedIn profile.">
+          <a class="pure-menu-link" href="https://www.linkedin.com/in/bill-daws/">LinkedIn</a>
+        </li>
+        <li class="pure-menu-item" title="Theme page on gohugo.io">
+          <a class="pure-menu-link" href="https://themes.gohugo.io/slick">Theme</a>
+        </li>
+        <li class="pure-menu-item" title="RSS Feed">
+          <a href="/index.xml" class="pure-menu-link">RSS</a>
+        </li>
+        <li class="pure-menu-item fix-cursor-pointer" title="Go to top">
+          <a class="pure-menu-link" id="btn-gototop">
+            <span class="fix-placement-up">&#x21e7;&#xfe0e;</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    <div class="pure-menu pure-menu-horizontal">
+      <ul class="pure-menu-list">
+        <li class="pure-menu-item pure-menu-disabled">
+          &copy; 2024 &mdash; Bill Daws — All rights reserved.
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+  </div>
+  <div class="pure-u-1-24 pure-u-md-5-24"></div>
+</div>
+</body>
+</html>
