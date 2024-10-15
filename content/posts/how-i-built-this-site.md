@@ -8,6 +8,14 @@ draft: false
 
 This post is one half documentation for my own purposes, and one half tutorial for someone who wants a similar site. This is a pretty simple project, so it's likely that what follows is more than what's necessary, but I'm doing it anyway. I intend to update this document at about the same rate as the system it describes (which I don't expect to change much).
 
+## Update
+
+About a year after writing this I decided to move the website to GitHub Pages. This architecture worked fine and cost barely any money ($2/month).
+
+But, it *did* cost money, and there's very little reason to pay for a low-traffic static website these days. I've already gotten what I wanted out of this endeavor, so the cost had no benefit.
+
+Moving it to GitHub Pages took all of about an hour since I was already writing the content with [Hugo.](https://gohugo.io/hosting-and-deployment/hosting-on-github/)
+
 # Guiding Principles
 
 1. **Focus on learning one thing at a time.** Focus is very important to productivity, and that includes not spreading myself thin. For example, I've never run a site on EC2 using [Phoenix](https://www.phoenixframework.org/) and Elixir. I've also never run a personal website before. I chose to learn the latter here. I can always revisit technologies for future projects.
